@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      style="padding: 0px; margin: 0px; background-color: rgb(236, 68, 68)"
+      id="topMenu"
+    >
+      <h1 class="menu">Pokemon Explorer</h1>
+      <h4 class="menu">Explore Pokemon and their base statistics</h4>
+    </div>
+    <br />
+    <div id="searchStuff">
+      <input
+        type="text"
+        id="search"
+        name="searchbar"
+        placeholder="🔍︎ Search by name or ID..."
+        required
+      />
+      <button id="submit">Search</button>
+      <button id="first">Show first 12</button>
+    </div>
+    <br />
+    <div id="pokemonDiv"></div>
+    <br />
+    <div id="loadMore"><button id="load">Load 12 more</button></div>
+  </body>
+</html>
