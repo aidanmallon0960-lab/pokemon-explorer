@@ -1,3 +1,4 @@
+import { Pokemon } from "./pokemon.js";
 let thing;
 let thingy;
 let number = 12;
@@ -12,6 +13,8 @@ const submit = document.getElementById("submit");
 const first = document.getElementById("first");
 const loadBtn = document.getElementById("load");
 let element;
+let thingy2;
+let coolcounter = document.getElementById("counter")
 
 thing1(offset);
 
@@ -24,7 +27,6 @@ first.addEventListener("click", () => {
   pokemonDiv.innerHTML = "";
   offset = 0;
   limit = 12;
-  search.innerHTML = "";
   search2 = false;
   loadBtn.disabled = false;
   thing1();
@@ -42,15 +44,15 @@ submit.addEventListener("click", () => {
     limit = 1025;
 
     search2 = true;
-    thing1();
     setTimeout(() => {
-      if (pokemonDiv.innerHTML == "") {
-        pokemonDiv.innerHTML +=
+      if (document.getElementById("loading")) {
+        pokemonDiv.innerHTML =
           "<p style='font-size:25px;'>Pokemon Not Found</p>";
         submit.disabled = false;
         first.disabled = false;
       }
     }, 5000);
+    thing1();
   } else {
     loadBtn.disabled = true;
     pokemonDiv.innerHTML =
@@ -67,22 +69,25 @@ function thing1() {
     });
 }
 function thing2(thing) {
-  for (thin of thing) {
+  for (let thin of thing) {
     fetch(thin.url)
       .then((response) => response.json())
       .then((name) => {
+        let poke = new Pokemon(name);
+        // console.log(poke);
+        // console.log("poke above");
         yo = String(name.id);
         if (search2 == false) {
-          createPokemonCards(name);
+          createPokemonCards(poke);
         } else if (
           (search2 == true && name.name.includes(search)) ||
-          String(name.id).includes(search)
+          String(poke.id).includes(search)
         ) {
           element = document.getElementById("loading");
           if (element && element.parentNode) {
             element.parentNode.removeChild(element);
           }
-          createPokemonCards(name);
+          createPokemonCards(poke);
         }
       });
   }
@@ -105,16 +110,17 @@ function getElement(name) {
   return `
   <div class="card">
         <h3 class="pokeId">#${name.id}</h3>
-        <img src="${name.sprites.front_default}"></img>
+        <img src="${name.image}"></img>
         <h3>${makeUpperCase(name.name)}</h3>
         <h4>${thingy2}</h3>
-        <h4>HP: ${name.stats[0].base_stat}</h3>
-        <h4>Attack: ${name.stats[1].base_stat}</h3>
-        <h4>Defense: ${name.stats[2].base_stat}</h3>
+        <h4>HP: ${name.health}</h3>
+        <h4>Attack: ${name.attackPower}</h3>
+        <h4>Defense: ${name.defense}</h3>
     </div>
     `;
 }
 
 function createPokemonCards(pokemon) {
+  coolcounter.innerHTML = `Pokemon Objects Created: ${Pokemon.totalPokemon}`
   pokemonDiv.innerHTML += getElement(pokemon);
 }
