@@ -29,7 +29,7 @@ class Pokemon {
     return this._health;
   }
   set health(value) {
-    this._health = Math.max(0, value);
+    this._health = Math.min(this.maxHealth, Math.max(0, value));
   }
   get healthPercent() {
     return (this.health / this.maxHealth) * 100 + "%";

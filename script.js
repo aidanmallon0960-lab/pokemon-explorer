@@ -14,7 +14,8 @@ const first = document.getElementById("first");
 const loadBtn = document.getElementById("load");
 let element;
 let thingy2;
-let coolcounter = document.getElementById("counter")
+let coolcounter = document.getElementById("counter");
+const pokesCreated = {};
 
 thing1(offset);
 
@@ -74,6 +75,7 @@ function thing2(thing) {
       .then((response) => response.json())
       .then((name) => {
         let poke = new Pokemon(name);
+        pokesCreated[poke.id] = poke;
         // console.log(poke);
         // console.log("poke above");
         yo = String(name.id);
@@ -107,20 +109,54 @@ function getElement(name) {
   }
   submit.disabled = false;
   first.disabled = false;
+
   return `
-  <div class="card">
+  <div class="card" id="pokeCard${name.id}">
         <h3 class="pokeId">#${name.id}</h3>
         <img src="${name.image}"></img>
         <h3>${makeUpperCase(name.name)}</h3>
-        <h4>${thingy2}</h3>
-        <h4>HP: ${name.health}</h3>
-        <h4>Attack: ${name.attackPower}</h3>
-        <h4>Defense: ${name.defense}</h3>
+        <h4>${thingy2}</h4>
+        <h4 class="hp">HP: ${name.health}</h4>
+        <h4>Attack: ${name.attackPower}</h4>
+        <h4>Defense: ${name.defense}</h4>
+        <button class="healBtn" onClick="heal(${name.id})">Heal</button>
+        <button class="reduceBtn" onClick="reduceHealth(${name.id})">Reduce Health</button>
+        <button class="resetBtn" onClick="resetHealth(${name.id})">Reset Health</button>
     </div>
     `;
 }
 
+function reduceHealth(pokeId) {
+  let currentPoke = pokesCreated[pokeId];
+  currentPoke.health -= 10;
+  let qs = "#pokeCard" + pokeId + " .hp";
+  let elem = document.querySelector(qs);
+  elem.innerHTML = `HP: ${currentPoke.health}`;
+}
+
+window.reduceHealth = reduceHealth;
+ 
+function heal(pokeId) {
+  let currentPoke = pokesCreated[pokeId];
+  currentPoke.health += 10;
+  let qs = "#pokeCard" + pokeId + " .hp";
+  let elem = document.querySelector(qs);
+  elem.innerHTML = `HP: ${currentPoke.health}`;
+}
+
+window.heal = heal;
+ 
+function resetHealth(pokeId) {
+  let currentPoke = pokesCreated[pokeId];
+  currentPoke.health = currentPoke.maxHealth;
+  let qs = "#pokeCard" + pokeId + " .hp";
+  let elem = document.querySelector(qs);
+  elem.innerHTML = `HP: ${currentPoke.health}`;
+}
+
+window.resetHealth = resetHealth;
+ 
 function createPokemonCards(pokemon) {
-  coolcounter.innerHTML = `Pokemon Objects Created: ${Pokemon.totalPokemon}`
+  coolcounter.innerHTML = `Pokemon Objects Created: ${Pokemon.totalPokemon}`;
   pokemonDiv.innerHTML += getElement(pokemon);
 }
